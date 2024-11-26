@@ -54,7 +54,6 @@ public class Main {
 //              This will be used to set fields in the header that are expected to be 0.
               /*
 
-              */
               final var bufResponse = ByteBuffer.allocate(512)
                       .order(ByteOrder.BIG_ENDIAN)
                       .putShort(ID)
@@ -65,8 +64,13 @@ public class Main {
                       .putShort(zero)
                       .putShort(zero)
                       .array();
+              */
+              DnsQuestion dnsQuestion = new DnsQuestion();
+              byte[] bufferResponse = dnsQuestion.array();
               // Prepares a response packet addressed to the client that sent the original packet.
-              final DatagramPacket packetResponse = new DatagramPacket(bufResponse, bufResponse.length, packet.getSocketAddress());
+              final DatagramPacket packetResponse = new DatagramPacket(
+                      bufferResponse, bufferResponse.length, packet.getSocketAddress()
+              );
               serverSocket.send(packetResponse);
           }
       } catch (IOException e) {
