@@ -35,24 +35,7 @@ public class DnsQuestion {
     public DnsQuestion() {}
 
 
-    private byte[] encodeDomainName(String domainName) {
-        /*
-        The added method encodeDomainName takes a domain name as a string and encodes it into the format expected by the DNS protocol.
-        It uses a ByteArrayOutputStream to construct the byte array.
-        The domain is split into labels using the split method on the period character.
-        For each label, the length is written as a single byte, followed by the actual bytes of the label.
-        After processing all labels, a null byte (0) is written to signify the end of the domain name sequence.
-        The resulting byte array represents the encoded domain name, ready to be included in the DNS message.
-        */
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        for(String label : domainName.split("\\.")){
-            out.write(label.length());
-            out.writeBytes(label.getBytes());
-        }
-        // to specify the end of the domain name
-        out.write(0);
-        return out.toByteArray();
-    }
+
 
     // after refractoring
     ByteBuffer buffer = ByteBuffer.allocate(12);
@@ -92,6 +75,24 @@ public class DnsQuestion {
         return buffer;
     }
 
+    private byte[] encodeDomainName(String domainName) {
+        /*
+        The added method encodeDomainName takes a domain name as a string and encodes it into the format expected by the DNS protocol.
+        It uses a ByteArrayOutputStream to construct the byte array.
+        The domain is split into labels using the split method on the period character.
+        For each label, the length is written as a single byte, followed by the actual bytes of the label.
+        After processing all labels, a null byte (0) is written to signify the end of the domain name sequence.
+        The resulting byte array represents the encoded domain name, ready to be included in the DNS message.
+        */
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        for(String label : domainName.split("\\.")){
+            out.write(label.length());
+            out.writeBytes(label.getBytes());
+        }
+        // to specify the end of the domain name
+        out.write(0);
+        return out.toByteArray();
+    }
 
     // before refractoring
     public byte[] array(){
