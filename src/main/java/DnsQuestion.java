@@ -55,6 +55,7 @@ public class DnsQuestion {
     }
 
     // after refractoring
+    ByteBuffer buffer = ByteBuffer.allocate(12);
     private ByteBuffer writeHeader(ByteBuffer buffer) {
         buffer.putShort(id);
         buffer.putShort(flags);
