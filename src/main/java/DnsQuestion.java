@@ -76,7 +76,7 @@ public class DnsQuestion {
             com is the content of the label
         \x00 is the null byte that terminates the domain name
     */
-    
+
     private ByteBuffer writeQuestion(ByteBuffer buffer) {
         /*
         The writeQuestion method is responsible for adding the question section to the DNS message.

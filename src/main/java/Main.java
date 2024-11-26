@@ -49,7 +49,7 @@ public class Main {
               // flag is of 16 bit but here we are considering only the most
               // significant bits of it like QR, OPCODE, AA etc and the 8th bit is QR
               // flipping it to 1 means it is a response and 0 - query
-//              short zero = (short) 0;
+              short zero = (short) 0;
 //              A short variable named zero is initialized to 0.
 //              This will be used to set fields in the header that are expected to be 0.
               /*
