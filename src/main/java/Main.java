@@ -59,7 +59,7 @@ public class Main {
                       .order(ByteOrder.BIG_ENDIAN)
                       .putShort(ID)
                       .put(bitSet.toByteArray())
-                      .put((byte) 0)
+                      .put((byte) 1)
                       .putShort(zero)
                       .putShort(zero)
                       .putShort(zero)
