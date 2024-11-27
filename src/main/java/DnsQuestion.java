@@ -26,7 +26,11 @@ public class DnsQuestion {
     // number of questions in the Question Section
     private short qdcount = 1;
     // number of resource records in the Answer Section
-    private short ancount;
+    // we are also including the answer section in this class only
+    // This indicates that the DNS message will contain one answer record in the answer section.
+    // The ancount field represents the number of resource records in the answer section of the DNS message,
+    // and setting it to 1 prepares the DNS server to include exactly one resource record in its response.
+    private short ancount = 1;
     // number of resource records in the Authority Section
     private short nscount;
     // number of resource records in the Additional Section
@@ -75,6 +79,27 @@ public class DnsQuestion {
         return buffer;
     }
 
+    // answer section
+    private ByteBuffer writeAnswer(ByteBuffer buffer) {
+        /*
+        The added method writeAnswer constructs the answer section of the DNS message.
+        It starts by encoding the domain name "codecrafters.io" into the DNS label format and writes it to the buffer.
+        Then, it specifies the record type and class by writing the value 1 as a 2-byte big-endian integer for both,
+        indicating an A record and the IN class. Next, it writes the TTL (Time-To-Live) as a 4-byte big-endian integer,
+        which is set to 300 seconds in this case. The length of the RDATA field is set to 4 bytes, also written as a 2-byte big-endian integer,
+        which is the size of an IPv4 address. Finally, it writes the IP address 127.0.0.1 as a 4-byte array directly into the buffer.
+        This method returns the buffer for further use.
+        */
+        buffer.put(encodeDomainName("codecrafters.io"));
+        buffer.putShort((short)1);
+        buffer.putShort((short)1);
+        buffer.putInt(300);
+        buffer.putShort((short)4);
+        buffer.put(new byte[] {127, 0, 0, 1});
+        return buffer;
+    }
+
+
     private byte[] encodeDomainName(String domainName) {
         /*
         The added method encodeDomainName takes a domain name as a string and encodes it into the format expected by the DNS protocol.
@@ -99,6 +124,8 @@ public class DnsQuestion {
         ByteBuffer byteBuffer = ByteBuffer.allocate(512);
         writeHeader(byteBuffer);
         writeQuestion(byteBuffer);
+        // since we have added answer section to this dnsQuestion
+        writeAnswer(byteBuffer);
         return byteBuffer.array();
     }
 }
