@@ -41,18 +41,6 @@ public class Main {
               serverSocket.receive(packet);
               System.out.println("Received data");
 
-//              DnsMessage dnsMessage = new DnsMessage();
-
-              final var header = DnsMessage.header(buffer);
-              final var questionPacket = DnsQuestion.writeQuestion("codecrafters.io", DnsMessage.DnsTypes.Qtype.A, DnsMessage.DnsTypes.Cclass.IN);
-              final var answerPacket = DnsAnswer.writeAnswer("codecrafters.io", DnsMessage.DnsTypes.Qtype.A, DnsMessage.DnsTypes.Cclass.IN);
-
-              final var bufferResponse = new byte[header.length + questionPacket.length + answerPacket.length];
-              arraycopy(header, 0, bufferResponse, 0, header.length);
-              arraycopy(questionPacket, 0, bufferResponse, header.length, questionPacket.length);
-              arraycopy(answerPacket, 0, bufferResponse, header.length + questionPacket.length, answerPacket.length);
-
-
 
               //// Response
               // every dns request has a id here we have set the id to 1234
@@ -83,8 +71,8 @@ public class Main {
                       .array();
               */
 //              dns has to send a response to the question section
-//              DnsQuestion dnsQuestion = new DnsQuestion();
-//              byte[] bufferResponse = dnsMessage.array();
+              DnsQuestion dnsQuestion = new DnsQuestion();
+              byte[] bufferResponse = dnsQuestion.array();
               // Prepares a response packet addressed to the client that sent the original packet.
               final DatagramPacket packetResponse = new DatagramPacket(
                       bufferResponse, bufferResponse.length, packet.getSocketAddress()
