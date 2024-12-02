@@ -5,10 +5,14 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.BitSet;
 
+import static java.lang.System.arraycopy;
+
 public class Main {
   public static void main(String[] args){
 
-    // You can use print statements as follows for debugging, they'll be visible when running tests.
+
+
+      // You can use print statements as follows for debugging, they'll be visible when running tests.
       System.out.println("Logs from your program will appear here!");
 
      // setting up a UDP connection
@@ -36,6 +40,19 @@ public class Main {
               // blocks the program until a packet is received
               serverSocket.receive(packet);
               System.out.println("Received data");
+
+//              DnsMessage dnsMessage = new DnsMessage();
+
+              final var header = DnsMessage.header(buffer);
+              final var questionPacket = DnsQuestion.writeQuestion("codecrafters.io", DnsMessage.DnsTypes.Qtype.A, DnsMessage.DnsTypes.Cclass.IN);
+              final var answerPacket = DnsAnswer.writeAnswer("codecrafters.io", DnsMessage.DnsTypes.Qtype.A, DnsMessage.DnsTypes.Cclass.IN);
+
+              final var bufferResponse = new byte[header.length + questionPacket.length + answerPacket.length];
+              arraycopy(header, 0, bufferResponse, 0, header.length);
+              arraycopy(questionPacket, 0, bufferResponse, header.length, questionPacket.length);
+              arraycopy(answerPacket, 0, bufferResponse, header.length + questionPacket.length, answerPacket.length);
+
+
 
               //// Response
               // every dns request has a id here we have set the id to 1234
@@ -66,8 +83,8 @@ public class Main {
                       .array();
               */
 //              dns has to send a response to the question section
-              DnsQuestion dnsQuestion = new DnsQuestion();
-              byte[] bufferResponse = dnsQuestion.array();
+//              DnsQuestion dnsQuestion = new DnsQuestion();
+//              byte[] bufferResponse = dnsMessage.array();
               // Prepares a response packet addressed to the client that sent the original packet.
               final DatagramPacket packetResponse = new DatagramPacket(
                       bufferResponse, bufferResponse.length, packet.getSocketAddress()
@@ -81,5 +98,30 @@ public class Main {
 
 
   }
+
+    private static void printByteBuffer(byte[] bytes) {
+
+        int counter = 0;
+
+        for (byte b : bytes) {
+
+            if (counter > 1) {
+
+                System.out.println("");
+
+                counter = 0;
+
+            }
+
+            System.out.print(Integer.toBinaryString(b) + " ");
+
+            counter++;
+
+        }
+
+        System.out.println("");
+
+    }
+
 
 }

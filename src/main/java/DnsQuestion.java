@@ -1,4 +1,4 @@
-
+/* this is basically a DNSMessage which has a Question and an Answer */
 //Question Section (12 byte) of DNS contains the list of questions the sender wants to ask
 // Question Section has 2 parts
 //1. Domain Name(ex google.com)
@@ -40,7 +40,7 @@ public class DnsQuestion {
 
 
 
-
+    // Header Section
     // after refractoring
     ByteBuffer buffer = ByteBuffer.allocate(12);
     private ByteBuffer writeHeader(ByteBuffer buffer) {
@@ -64,7 +64,7 @@ public class DnsQuestion {
             com is the content of the label
         \x00 is the null byte that terminates the domain name
     */
-
+    // Question Section
     private ByteBuffer writeQuestion(ByteBuffer buffer) {
         /*
         The writeQuestion method is responsible for adding the question section to the DNS message.
